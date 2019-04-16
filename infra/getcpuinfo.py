@@ -1,15 +1,16 @@
 from __future__ import division
 import requests
 import json
+import time
 
 headers = {
     'Content-type': 'application/json',
 }
 
 
-response=requests.get('http://localhost:8080/api/v1.3/containers/docker', headers=headers)
+#response=requests.get('http://localhost:8080/api/v1.3/containers/docker', headers=headers)
 
-response=json.loads(response.content)
+#response=json.loads(response.content)
 
 conlist=[]
 
@@ -44,4 +45,5 @@ while it<len(conlist):
           
         it=it+1
           
+	#time.sleep(10)
 print("completed")
