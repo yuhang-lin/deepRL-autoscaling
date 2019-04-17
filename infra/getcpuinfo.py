@@ -28,7 +28,7 @@ def cpuinfo():
 	cpudata=[]
 
 	while it<len(conlist):
-        	req='http://152.46.18.217:8080/api/v2.0/stats/'+str(conlist[it])+'?type=docker&count=2'
+        	req='http://152.46.19.96:8080/api/v2.0/stats/'+str(conlist[it])+'?type=docker&count=2'
         	response = requests.get(req, headers=headers)
 
         	coninfo=json.loads(response.content)
@@ -48,7 +48,8 @@ def cpuinfo():
 
 
 def main():
-  print("Hello world")
+	print("Hello world")
+	cpuinfo()
   
 if __name__== "__main__":
   main()
