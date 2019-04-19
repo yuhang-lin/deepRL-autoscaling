@@ -1,4 +1,6 @@
 import matplotlib.pyplot as plt
+import numpy as np
+
 def plot_cpu(data):
     fig = plt.gcf()
     fig.set_size_inches(18.5, 10.5)
