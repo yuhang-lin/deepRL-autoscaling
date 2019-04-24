@@ -1,0 +1,32 @@
+version: '2'
+services:
+  rubis:
+    build:
+      context: ./Rubis
+    ports:
+     - "5001:8080"
+    depends_on:
+     - rubisdb
+  rubisdb:
+    build:
+      context: ./RubisDB
+  rubisweb:
+    build:
+      context: ./RubisWeb
+    ports:
+     - "5002:80"
+    environment:
+     - LB_MEMBER_1=dockerfiles_rubis_1
+    depends_on:
+     - rubis
+  rubisclient:
+    depends_on:
+     - rubisdb
+     - rubis
+     - rubisweb
+    build:
+      context: ./RubisClient
+    ports:
+     - "5003:80"
+    environment:
+     - TARGET=initDB

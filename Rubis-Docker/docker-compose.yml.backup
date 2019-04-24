@@ -1,0 +1,44 @@
+version: '2.2'
+services:
+  rubis:
+    build:
+      context: ./Rubis
+    ports:
+    - "5001:8080"
+    depends_on:
+     - rubisdb
+    labels:
+      loadbalancer: "apache"
+    mem_limit: 1024MB
+    cpus: 2
+  rubisdb:
+    build:
+      context: ./RubisDB
+    mem_limit: 1024MB
+    cpus: 2
+  rubisweb:
+    build:
+      context: ./RubisWeb
+    ports:
+     - "5002:80"
+    volumes:
+     - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+     - rubis
+    security_opt:
+     - label:disable
+    mem_limit: 1024MB
+    cpus: 2
+  rubisclient:
+    depends_on:
+     - rubisdb
+     - rubis
+     - rubisweb
+    build:
+      context: ./RubisClient
+    ports:
+     - "5003:80"
+    environment:
+     - TARGET=
+    mem_limit: 1024MB
+    cpus: 2

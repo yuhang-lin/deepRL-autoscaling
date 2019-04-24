@@ -1,0 +1,91 @@
+#!/bin/bash
+
+#get the loadbalanced hosts from the Docker API!
+get_backend () {
+
+python - << EOF
+import docker
+balancers=''
+client=docker.DockerClient(base_url='unix://var/run/docker.sock',version='auto')
+for container in client.containers.list({'label':"loadbalancer=apache", 'status':"running"}):
+ balancers+="container.name "
+
+print balancers
+EOF
+}
+ 
+###########################################################
+# DEPLOY_ENV contains the loadbalanced hosts. Its values are read from:
+#  1) LB_MEMBER_* defined in a docker-compose or using the -e option
+#  2) Using links (not working with docker compose >= v2)
+#  3) The docker API, NOTE: in centos due to selinux restrictions the option "--security-opt label:disable" is required wheter getenforce=enforcing.
+###########################################################
+
+# 1) Env variables
+DEPLOY_ENV=( ${!LB_MEMBER_*} )
+PORT_ENV=8080
+############################################################
+
+# 2) Links
+if [  -z "${DEPLOY_ENV}" ]; then
+  DEPLOY_ENV=( $(env | awk -F "=" '{print $1}' | grep '[a-zA-Z]*_[0-9]*_PORT_[0-9]*_TCP_ADDR') )
+  PORT_ENV=( $(env | awk -F "=" '{print $1}' | grep '[a-zA-Z]*_[0-9]*_PORT_[0-9]*_TCP_PORT') )
+fi
+#############################################################
+
+# 3) Docker API
+#ugly workaround - creates a variable per balanced host
+if [  -z "${DEPLOY_ENV}" ]; then
+ 
+ cluster=( $(get_backend) )
+  
+ for(( e=1; e<${#cluster[@]}; e++ )); 
+ do
+   declare "LB_MEMBER_$e"="${cluster[$e]}"
+ done
+ 
+ DEPLOY_ENV=( ${!LB_MEMBER_*} )
+fi
+##############################################################
+
+echo ${DEPLOY_ENV[*]}
+
+if [ ! -z "${DEPLOY_ENV}" ]; then
+
+cat << EOF > /etc/httpd/conf.d/rubis.conf
+ <VirtualHost *:80>
+   ServerName $HOSTNAME
+   ServerAlias $WEB_NAME
+   # increase allowed size of a client's HTTP request-line, required by Rubis GET requests
+   LimitRequestLine 64000
+   LimitRequestFieldSize 64000
+   # set 10 minutes timeout ... large enough to avoid 502
+   TimeOut 600 
+
+   <Proxy "balancer://mycluster">
+EOF
+
+## now loop through the above array of hostname, add one balancer member for each tomcat container
+  for i in "${DEPLOY_ENV[@]}"
+  do
+    member=$(eval "echo \$$i")
+    echo $member
+    echo -e "\tBalancerMember \"http://$member:$PORT_ENV\"">>/etc/httpd/conf.d/rubis.conf
+  done
+
+  cat << EOF >> /etc/httpd/conf.d/rubis.conf
+     ProxySet lbmethod=bytraffic
+   </Proxy>
+
+   ProxyPass "/rubis_servlets/" "balancer://mycluster/rubis_servlets/"
+   ProxyPassReverse "/rubis_servlets/" "balancer://mycluster/rubis_servlets/"
+ </VirtualHost>
+EOF
+
+echo "start apache!"  
+exec /usr/sbin/httpd -D FOREGROUND
+
+else
+  echo "nothing to do, Balancer members are not defined"
+  exit 1
+fi

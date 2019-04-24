@@ -1,0 +1,7 @@
+version: '2'
+services:
+  dbcluster:
+    build: .
+    environment:
+     - CL_MEMBER_1=rubisdb_dbcluster_1
+     - CL_MEMBER_2=rubisdb_dbcluster_2
