@@ -19,10 +19,10 @@ def setVCPU():
 
 	conlist=[]
 
-	conlist.append('rubis-wg-0')
-	conlist.append('rubis-control-tier-0')
-	conlist.append('rubis-web-tier-0')
-	conlist.append('rubis-db-tier-0')
+	conlist.append('rubis_rubisclient_1')
+	conlist.append('rubis_rubisweb_1')
+	conlist.append('rubis_rubis_1')
+	conlist.append('rubis_rubisdb_1')
 
 	availableVCPU = 0
 
@@ -84,4 +84,4 @@ def setVCPU():
 	return "Sucess"
 
 if __name__ == '__main__':
-	app.run(host= '152.46.19.96')
+	app.run(host= '152.46.16.197')

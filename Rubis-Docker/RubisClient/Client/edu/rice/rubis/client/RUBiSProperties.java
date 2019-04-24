@@ -61,6 +61,7 @@ public class RUBiSProperties
   private String  remoteCommand;
   private int     nbOfClients;
   private String  transitionTable;
+  public  String  traceData;
   private int     nbOfColumns;
   private int     nbOfRows;
   private int     maxNbOfTransitions;
@@ -298,6 +299,9 @@ public class RUBiSProperties
       floo = new Float(getProperty("workload_down_ramp_slowdown_factor"));
       downSlowdown = floo.intValue();
       System.out.println(downSlowdown+"<br>");
+      
+      
+      traceData=getProperty("workload_trace");
 
       // # Database Information
       System.out.println("\n<h3><br>### Database Information ###</h3>");
@@ -545,6 +549,16 @@ public class RUBiSProperties
   public Vector getRegions()
   {
     return regions;
+  }
+
+  /**
+   *    * Get a vector of region names as found in the region file given in the regions_file field
+   *       *
+   *          * @return vector of region names
+   *             */
+  public String getTraceData()
+  {
+    return traceData;
   }
 
 

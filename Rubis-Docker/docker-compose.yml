@@ -39,6 +39,6 @@ services:
     ports:
      - "5003:80"
     environment:
-     - TARGET=benchmark
+     - TARGET=emulator
     mem_limit: 1024MB
     cpus: 2
