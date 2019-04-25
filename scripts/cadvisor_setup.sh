@@ -11,3 +11,7 @@ sudo docker run \
   --volume=/cgroup:/cgroup:ro \
   google/cadvisor:latest
 
+
+sudo /sbin/sysctl -w net.ipv4.conf.all.forwarding=1
+
+iptables -I INPUT -p tcp --dport 5000 -j ACCEPT
