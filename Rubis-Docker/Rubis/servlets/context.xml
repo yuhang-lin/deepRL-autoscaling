@@ -31,7 +31,7 @@
   <Resource name="jdbc/Rubismysql" auth="Container" type="javax.sql.DataSource"
                maxTotal="100" maxIdle="10" maxWaitMillis="30000" removeAbandonedOnBorrow="true"
                username="rubis" password="rubis" driverClassName="com.mysql.jdbc.Driver"
-               url="jdbc:mysql://759bc4be1a76:3306/rubis?autoReconnect=true&amp;useSSL=false"/>
+               url="jdbc:mysql://3d658346adac:3306/rubis?autoReconnect=true&amp;useSSL=false"/>
 
 
 

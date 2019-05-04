@@ -430,6 +430,7 @@ public class ClientEmulator
 
       if (args.length <= 1)
       {
+	//reportDir = "bench/stats/";
         reportDir = "bench/"+TimeManagement.currentDateToString()+"/";
         reportDir = reportDir.replace(' ', '@');
       }
@@ -631,6 +632,7 @@ public class ClientEmulator
           client.startMonitoringProgram(
             (String) client.rubis.getRemoteClients().get(i),
             tmpDir + "client" + (i + 1));
+      
       }
 
       // Redirect output for traces
@@ -693,92 +695,92 @@ public class ClientEmulator
     System.out.println(
       "&nbsp&nbsp&nbsp<A HREF=\"#down\">Down ramp trace</A><br><p><p>");
 
-    // Run user sessions
-    System.out.println(
-      "ClientEmulator: Starting "
-        + client.rubis.getNbOfClients()
-        + " session threads<br>");
-    for (int i = 0; i < client.rubis.getNbOfClients(); i++)
-    {
-      sessions[i] =
-        new UserSession("UserSession" + i, client.urlGen, client.rubis, stats);
-      sessions[i].start();
-    }
+    	// Run user sessions
+    	System.out.println(
+      	"ClientEmulator: Starting "
+        	+ client.rubis.getNbOfClients()
+        	+ " session threads<br>");
+    	for (int i = 0; i < client.rubis.getNbOfClients(); i++)
+    	{
+      		sessions[i] =
+        	new UserSession("UserSession" + i, client.urlGen, client.rubis, stats);
+      		sessions[i].start();
+    	}
 
-    // Start up-ramp
-    System.out.println("<br><A NAME=\"up\"></A>");
-    System.out.println(
-      "<h3>ClientEmulator: Switching to ** UP RAMP **</h3><br><p>");
-    client.setSlowDownFactor(client.rubis.getUpRampSlowdown());
-    upRampDate = new GregorianCalendar();
-    try
-    {
-      Thread.currentThread().sleep(client.rubis.getUpRampTime());
-    }
-    catch (java.lang.InterruptedException ie)
-    {
-      System.err.println("ClientEmulator has been interrupted.");
-    }
-    upRampStats.merge(stats);
-    stats.reset();
-    // Note that as this is not atomic we may lose some stats here ...
+    	// Start up-ramp
+    	System.out.println("<br><A NAME=\"up\"></A>");
+   	 System.out.println(
+      	"<h3>ClientEmulator: Switching to ** UP RAMP **</h3><br><p>");
+    	client.setSlowDownFactor(client.rubis.getUpRampSlowdown());
+    	upRampDate = new GregorianCalendar();
+    	try
+    	{
+      		Thread.currentThread().sleep(client.rubis.getUpRampTime());
+    	}
+    	catch (java.lang.InterruptedException ie)
+    	{
+      	System.err.println("ClientEmulator has been interrupted.");
+    	}
+    	upRampStats.merge(stats);
+    	stats.reset();
+    	// Note that as this is not atomic we may lose some stats here ...
 
-    // Start runtime session
-    System.out.println("<br><A NAME=\"run\"></A>");
-    System.out.println(
-      "<h3>ClientEmulator: Switching to ** RUNTIME SESSION **</h3><br><p>");
-    client.setSlowDownFactor(1);
-    runSessionDate = new GregorianCalendar();
-    try
-    {
-      Thread.currentThread().sleep(client.rubis.getSessionTime());
-    }
-    catch (java.lang.InterruptedException ie)
-    {
-      System.err.println("ClientEmulator has been interrupted.");
-    }
-    runSessionStats.merge(stats);
-    stats.reset();
+    	// Start runtime session
+    	System.out.println("<br><A NAME=\"run\"></A>");
+    	System.out.println(
+      	"<h3>ClientEmulator: Switching to ** RUNTIME SESSION **</h3><br><p>");
+    	client.setSlowDownFactor(1);
+    	runSessionDate = new GregorianCalendar();
+    	try
+    	{
+      		Thread.currentThread().sleep(client.rubis.getSessionTime());
+    	}
+    	catch (java.lang.InterruptedException ie)
+    	{
+      		System.err.println("ClientEmulator has been interrupted.");
+    	}
+    	runSessionStats.merge(stats);
+    	stats.reset();
     // Note that as this is not atomic we may lose some stats here ...
 
     // Start down-ramp
-    System.out.println("<br><A NAME=\"down\"></A>");
-    System.out.println(
-      "<h3>ClientEmulator: Switching to ** DOWN RAMP **</h3><br><p>");
-    client.setSlowDownFactor(client.rubis.getDownRampSlowdown());
-    downRampDate = new GregorianCalendar();
-    try
-    {
-      Thread.currentThread().sleep(client.rubis.getDownRampTime());
-    }
-    catch (java.lang.InterruptedException ie)
-    {
-      System.err.println("ClientEmulator has been interrupted.");
-    }
-    downRampStats.merge(stats);
-    endDownRampDate = new GregorianCalendar();
+    	System.out.println("<br><A NAME=\"down\"></A>");
+    	System.out.println(
+      	"<h3>ClientEmulator: Switching to ** DOWN RAMP **</h3><br><p>");
+    	client.setSlowDownFactor(client.rubis.getDownRampSlowdown());
+    	downRampDate = new GregorianCalendar();
+    	try
+    	{
+      		Thread.currentThread().sleep(client.rubis.getDownRampTime());
+    	}
+    	catch (java.lang.InterruptedException ie)
+    	{
+      		System.err.println("ClientEmulator has been interrupted.");
+    	}
+    	downRampStats.merge(stats);
+    	endDownRampDate = new GregorianCalendar();
 
-    // Wait for completion
-    client.setEndOfSimulation();
-    System.out.println("ClientEmulator: Shutting down threads ...<br>");
-    for (int i = 0; i < client.rubis.getNbOfClients(); i++)
-    {
-      try
-      {
-        sessions[i].join(2000);
-      }
-      catch (java.lang.InterruptedException ie)
-      {
-        System.err.println(
-          "ClientEmulator: Thread " + i + " has been interrupted.");
-      }
-    }
-    System.out.println("Done\n");
-    endDate = new GregorianCalendar();
-    allStats.merge(stats);
-    allStats.merge(runSessionStats);
-    allStats.merge(upRampStats);
-    System.out.println("<p><hr><p>");
+    	// Wait for completion
+    	client.setEndOfSimulation();
+    	System.out.println("ClientEmulator: Shutting down threads ...<br>");
+    	for (int i = 0; i < client.rubis.getNbOfClients(); i++)
+    	{
+      		try
+      		{
+        	sessions[i].join(2000);
+      		}
+      		catch (java.lang.InterruptedException ie)
+      		{
+        		System.err.println(
+          		"ClientEmulator: Thread " + i + " has been interrupted.");
+      		}
+    	}
+    	System.out.println("Done\n");
+    	endDate = new GregorianCalendar();
+    	allStats.merge(stats);
+    	allStats.merge(runSessionStats);
+    	allStats.merge(upRampStats);
+    	System.out.println("<p><hr><p>");
 
     // #############################################
     // ### EXPERIMENT IS OVER, COLLECT THE STATS ###

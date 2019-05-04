@@ -29,7 +29,17 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Random;
 import java.util.Vector;
-
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 /**
  * RUBiS user session emulator. This class plays a random user session emulating
  * a Web browser.
@@ -751,6 +761,7 @@ public class UserSession extends Thread
     long time = 0;
     long startSession = 0;
     long endSession = 0;
+    String FILENAME = "filename.txt";
 
     while (!ClientEmulator.isEndOfSimulation())
     {
@@ -774,7 +785,38 @@ public class UserSession extends Thread
         lastURL = computeURLFromState(next);
         time = System.currentTimeMillis();
         lastHTMLReply = callHTTPServer(lastURL);
-        stats.updateTime(next, System.currentTimeMillis() - time);
+	long responseTime=System.currentTimeMillis() - time;
+        stats.updateTime(next, responseTime);
+
+	//code to insert response time
+	BufferedWriter bw = null;
+	FileWriter fw = null;
+	try{
+		File file = new File(FILENAME);
+		//if file doesnt exists, then create it
+		if (!file.exists()) {
+		 	file.createNewFile();
+		}
+
+		fw = new FileWriter(file.getAbsoluteFile(),true);
+		bw = new BufferedWriter(fw);
+		bw.write(String.valueOf(responseTime));
+		bw.newLine();
+	}
+	catch (IOException e) {
+		System.out.println("Thread "+this.getName()+": new code caused error");
+	}
+	finally {
+		try {
+			if (bw != null)
+				bw.close();
+			if (fw != null)
+				fw.close();
+		}
+		catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
         if (lastHTMLReply == null)
         {
           if (debugLevel > 0)
@@ -803,11 +845,13 @@ public class UserSession extends Thread
       if ((transition.isEndOfSession()) || (nbOfTransitions == 0))
       {
         if (debugLevel > 2)
-          System.out.println("Thread " + this.getName() + ": Session of "
-              + username + " successfully ended<br>");
+          //System.out.println("Thread " + this.getName() + ": Session of "
+            //  + username + " successfully ended<br>");
         endSession = System.currentTimeMillis();
         long sessionTime = endSession - startSession;
         stats.addSessionTime(sessionTime);
+	System.out.println("Thread " + this.getName() + ": Session of "
+              + username + " successfully ended with session time"+ sessionTime);
       }
       else
       {

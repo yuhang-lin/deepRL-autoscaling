@@ -15,10 +15,10 @@ def setVCPU():
 
 	conlist=[]
 
-	conlist.append('rubis-wg-0')
-	conlist.append('rubis-control-tier-0')
-	conlist.append('rubis-web-tier-0')
-	conlist.append('rubis-db-tier-0')
+	conlist.append('rubis_rubisclient_1')
+	conlist.append('rubis_rubisweb_1')
+	conlist.append('rubis_rubis_1')
+	conlist.append('rubis_rubisdb_1')
     
 	availableVCPU = 0
 
