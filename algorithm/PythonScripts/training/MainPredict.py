@@ -1,10 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
-
-#get_ipython().run_line_magic('matplotlib', 'inline')
 from __future__ import print_function
 import numpy as np
 import tensorflow as tf
@@ -25,6 +18,15 @@ import requests
 from apscheduler.schedulers.background import BackgroundScheduler
 import datetime
 from keras import regularizers
+
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[1]:
+
+
+#get_ipython().run_line_magic('matplotlib', 'inline')
+
 
 
 # In[2]:
