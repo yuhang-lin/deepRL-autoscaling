@@ -4,7 +4,7 @@
 # In[1]:
 
 
-get_ipython().run_line_magic('matplotlib', 'inline')
+#get_ipython().run_line_magic('matplotlib', 'inline')
 from __future__ import print_function
 import numpy as np
 import tensorflow as tf
@@ -32,7 +32,7 @@ from keras import regularizers
 
 import sys, os
 sys.path.insert(0, os.path.abspath('..'))
-from apis.getcpuinfonoscaling import cpuinfo 
+from apis.getcpuinfo import cpuinfo 
 
 
 # In[3]:
@@ -454,12 +454,14 @@ RL3OutputDNNModel = getTrainedRL3OutputDNN(50)
 
 
 temp = cpuinfo()
-modelChoice = input("Enter Model Choice: 0: RL-LSTM, 1: RL-DNN, 2: Simple LSTM, 3: Simple DNN")
+modelChoice = input("Enter Model Choice:\n0: RL-LSTM, 1: RL-DNN, 2: Simple LSTM, 3: Simple DNN\n")
 models = [RLLSTMModel, RL3OutputDNNModel, LSTMModel, DL3OutputModel]
-test = Prediction(models[modelChoice],50,len(temp),30,70)
-models[modelChoice].summary()
-#for i in range(51):
-    #test.generatePredictions()
+test = Prediction(models[int(modelChoice)],50,len(temp),30,70)
+print("Architecture of the model choosen:\n")
+currModel = models[int(modelChoice)]
+currModel.summary()
+for i in range(51):
+    test.generatePredictions()
 
 
 # In[38]:
