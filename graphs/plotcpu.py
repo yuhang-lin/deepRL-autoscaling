@@ -21,9 +21,9 @@ def plot_cpu(data):
     plt.setp(ax3.get_xticklabels(), visible=False)
     ax4 = plt.subplot(514, sharex=ax1)
     plt.plot(t, data[3]) # cotainer 3
-    plt.setp(ax4.get_xticklabels(), visible=False)
-    ax5 = plt.subplot(515, sharex=ax1)
-    plt.plot(t, data[4]) # cotainer 4
+    plt.setp(ax4.get_xticklabels(), visible=True)
+    plt.xlabel("Time", font_size=18)
+    plt.ylabel("CPU Percentage", font_size=18)
     
     plt.show()
 
