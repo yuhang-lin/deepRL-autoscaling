@@ -1,3 +1,8 @@
+#Written by: SRINIVAS PARASA
+
+#usgae: To installs docker and docker compose which are required for setting up Rubis environment.
+
+
 #script to install docker
 sudo yum install -y yum-utils \
   device-mapper-persistent-data \
@@ -9,6 +14,7 @@ sudo yum-config-manager \
 
 sudo yum install docker-ce docker-ce-cli containerd.io
 sudo systemctl start docker
+sudo service docker restart
 
 
 #scripts to install docker compose

@@ -1,3 +1,7 @@
+#written by: Srinivas Parasa
+#Usage: this coded in integrated in ML modules to get CPU percentages.
+
+
 from __future__ import division
 import requests
 import json

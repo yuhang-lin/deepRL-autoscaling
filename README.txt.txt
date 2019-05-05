@@ -11,7 +11,10 @@ Prediction Algorithms:
 - Policy Gradient + Baseline Models by Hari Krishna Majety
 
 Infrastructure:
-
+-Executed in Infrastructure VCL instance.
+-Setup Rubis containers with variable load.
+-Expose API for CPU percentage.
+-Expose API for Scaling module.
 
 
 -----------------------------------------------------------------------------------
@@ -30,7 +33,12 @@ Prediction Instance:
 
 
 Infrastructure Instance:
-
+-Clone the git repository() to Infrastructure Instance. if you face "git not installed error" i included the command in "anonymouscmd.sh" file with comments.
+-Go inside the /deepRL-autoscaling/scripts folder and run "dockersetup.sh" shell script to install docker and docker compose.
+-In the same folder follow the steps in "Rubiscontainers.sh" file to up all the four containers. Users are manually required to edit two files please follow them exactly.
+-Run "cadvisor_setup.sh" to up cadvisor container which helps to get CPU stats.
+-Run "flasksetup.sh" to install required packages for flask API.
+-Go to "deepRL-autoscaling/apis" and run "python app.py" which starts API to hit scaling module.
 
 -----------------------------------------------------------------------------------
 FILES BY Hari Krishna Majety:
@@ -51,4 +59,20 @@ SimpleLSTM.ipynb
 
 All ipynb notebooks were used for experimentation with various model architectures and hdf5 files store the weights after training the models.
 
+FILES BY Srinivas Parasa:
+-/deepRL-autoscaling/scripts
+ -anonymouscmd.sh
+ -dockersetup.sh
+ -Rubiscontainers.sh
+ -cadvisor_setup.sh
+ -flasksetup.sh
+-/deepRL-autoscaling/apis
+ -getcpuinfo.py
+ -app.py
+ -test.py
+ -cpuinfo
+-deepRL-autoscaling/Rubis-Docker/RubisClient/Client/edu/rice/rubis/client/UserSession.java
+
+
+.sh files are used to setup container infrastructure and .py files are used to expose APIs for scaling and cpupercentage module.
 -----------------------------------------------------------------------------------
