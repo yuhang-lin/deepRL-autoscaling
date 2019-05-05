@@ -29,6 +29,7 @@ from keras import regularizers
 
 # In[2]:
 
+ScalingAPIIP = input("Enter Scaling API IP Address(Port and id expected to be 5000 and changeVCPU resp.):\n")
 
 import sys, os
 sys.path.insert(0, os.path.abspath('..'))
@@ -375,7 +376,7 @@ class Prediction():
             print("Last Prediction Accuracy",accuracy)
             self.accuracy_list.append(accuracy)
             print("Current Predictions: ",predictions,"\n")            
-            callAPIWithPredictions(predictions,"http://152.46.19.80:5000/changeVCPU")
+            callAPIWithPredictions(predictions,"http://"+ScalingAPIIP+":5000/changeVCPU")
             self.lastPredictions = predictions
             
     
