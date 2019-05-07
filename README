@@ -3,9 +3,10 @@ CODE COMPONENTS:
 
 - Prediction Algorithms (By Yuhang Lin, Hari Krishna Majety)
 - Infrastructure (By Srinivas Parasa)
+- Visualization (By Yuhang Lin)
 
 Prediction Algorithms:
-- Executed in AWS DeepLearning instances.
+- Executed in AWS DeepLearning instances (Deep Learning AMI (Ubuntu) Version 22.0).
 - Requires Anaconda with Tensorflow, Tensorflow-gpu, apscheduler packages
 - Deep Q Network Models by Yuhang Lin
 - Policy Gradient + Baseline Models by Hari Krishna Majety
@@ -16,20 +17,25 @@ Infrastructure:
 -Expose API for CPU percentage.
 -Expose API for Scaling module.
 
+Visualization
+- Plot CPU curves of containers using API or recorded data
+- Plot accuracy curves when testing models
 
 -----------------------------------------------------------------------------------
 STEPS TO SETUP THE PROJECT:
 
 Prediction Instance:
--Clone the git repository() to AWS Deep Learning Instance and install the required libraries
+-Clone the git repository() to AWS Deep Learning Instance and install the required libraries. We recommend an instance with at least 2GB memory and 2 vCPU.
 -Make sure the infrastructure modules are all up and set the usage info ip address in the file apis/getcpuinfo.py and the scaling API ip address as parameter in the respective prompt.
 -For using Policy Gradients (2 variants) & baseline models(2 variants) using pretrained weights,  run the algorithm/MainPredict.py and enter the choice to model to use in the respective prompt.
 -To train new models, run
+---DQN-recorded-data-training.py for DQN model
+---policy-gradient-one-output.py for initial Policy Gradient model
 ---RLWithLSTM.py for LSTM variant of Policy Gradients based reinforcement learning
 ---RLWithDNN3Output.py for DNN variant of Policy Gradients based reinforcement learning
 ---SimpleLSTM.py for LSTM variant of baseline models
 ---3Output.py for DNN variant of baseline models
------All these models require a csv file containing containers' CPU usage data sampled continuously during a certain interval of time. Each row(i) in usageData.csv represents CPU usage data of all containers at i-th time instant.
+-----All these models above require a CSV file containing containers' CPU usage data sampled continuously during a certain interval of time. Each row(i) in usageData.csv represents CPU usage data of all containers at i-th time instant.
 
 
 Infrastructure Instance:
@@ -41,6 +47,22 @@ Infrastructure Instance:
 -Go to "deepRL-autoscaling/apis" and run "python app.py" which starts API to hit scaling module.
 
 -----------------------------------------------------------------------------------
+Files by Yuhang Lin:
+algorithm/
+-DQNTest.ipynb: tests DQN using CPU API; requires dqn-4layer.h5
+-DQN-recorded-data-training.py: trains DQN with recorded data; requires usageData.csv 
+(DQN-recorded-data-training.ipynb contains both source code and training output)
+-policy-gradient-one-output.py: trains a simple Policy Gradient model with one output neuron; requires cdata.csv
+(policy-gradient-one-output.ipynb contains both source code and training output)
+graphs/
+-plotcpu.py: plots CPU curves
+-PlotGraphFromData.ipynb: plots CPU curves using recorded CSV files; requires /graphs/data/container*.csv
+-PlotGraphFromAPI.ipynb: plots CPU curves using data retrieved from CPU API
+apis/
+-CPUAPITest.ipynb: tests connection of CPU API
+-ScaleAPITest.ipynb: tests connection of scaling API
+-CheckGPU.ipynb: checks if GPU is enabled
+
 FILES BY Hari Krishna Majety:
 
 Main Files:
